@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
@@ -73,9 +74,15 @@ public class InOrderParkingStrategyTest {
 
     @Test
     public void testPark_givenThereIsOneFullParkingLot_thenCreateReceipt() {
-
-        /* Exercise 2: Test park() method. Use Mockito.spy and Mockito.verify to test the situation for one available parking lot but it is full */
-
+        InOrderParkingStrategy mockInOrderParkingStrategy = spy(inOrderParkingStrategy);
+        ParkingLot mockParkingLot1 = Mockito.mock(ParkingLot.class);
+        given(mockParkingLot1.isFull()).willReturn(true);
+        ParkingLot mockParkingLot2 = Mockito.mock(ParkingLot.class);
+        given(mockParkingLot2.isFull()).willReturn(false);
+        Car car = mock(Car.class);
+        given(car.getName()).willReturn("car");
+        mockInOrderParkingStrategy.park(asList(mockParkingLot1,mockParkingLot2),car);
+        verify(mockInOrderParkingStrategy, times(1)).createReceipt(mockParkingLot2,car);
     }
 
     @Test
