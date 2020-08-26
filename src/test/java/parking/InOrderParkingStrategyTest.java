@@ -36,8 +36,6 @@ public class InOrderParkingStrategyTest {
         Receipt receipt = inOrderParkingStrategy.createReceipt(mockParkingLot, mockCar);
         assertEquals("parkingLot", receipt.getParkingLotName());
         assertEquals("car", receipt.getCarName());
-        /* Exercise 1, Write a test case on InOrderParkingStrategy.createReceipt()
-         * With using Mockito to mock the input parameter */
     }
 
     @Test
@@ -48,8 +46,6 @@ public class InOrderParkingStrategyTest {
         Receipt receipt = inOrderParkingStrategy.createNoSpaceReceipt(mockCar);
         assertEquals(NO_PARKING_LOT, receipt.getParkingLotName());
         assertEquals("car", receipt.getCarName());
-        /* Exercise 1, Write a test case on InOrderParkingStrategy.createNoSpaceReceipt()
-         * With using Mockito to mock the input parameter */
 
     }
 
@@ -62,20 +58,17 @@ public class InOrderParkingStrategyTest {
         given(car.getName()).willReturn("car");
         mockInOrderParkingStrategy.park(singletonList(mockParkingLot),car);
         verify(mockInOrderParkingStrategy, times(1)).createNoSpaceReceipt(car);
-        /* Exercise 2: Test park() method. Use Mockito.spy and Mockito.verify to test the situation for no available parking lot */
     }
 
     @Test
     public void testPark_givenThereIsOneParkingLotWithSpace_thenCreateReceipt() {
         InOrderParkingStrategy mockInOrderParkingStrategy = spy(inOrderParkingStrategy);
         ParkingLot mockParkingLot = Mockito.mock(ParkingLot.class);
-        given(mockParkingLot.isFull()).willReturn(true);
-        when(mockInOrderParkingStrategy.createNoSpaceReceipt(new Car("car"))).thenCallRealMethod();
-        Receipt receipt = mockInOrderParkingStrategy.park(singletonList(mockParkingLot),new Car("car"));
-        assertEquals(NO_PARKING_LOT,receipt.getParkingLotName());
-        assertEquals("car",receipt.getCarName());
-        /* Exercise 2: Test park() method. Use Mockito.spy and Mockito.verify to test the situation for one available parking lot */
-
+        given(mockParkingLot.isFull()).willReturn(false);
+        Car car = mock(Car.class);
+        given(car.getName()).willReturn("car");
+        mockInOrderParkingStrategy.park(singletonList(mockParkingLot),car);
+        verify(mockInOrderParkingStrategy, times(1)).createReceipt(mockParkingLot,car);
     }
 
     @Test
